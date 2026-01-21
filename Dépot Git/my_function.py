@@ -95,7 +95,7 @@ def validar_projeção_rasters(base_dir, filenames, epsg_alvo=32630):
                     current_epsg = file_srs.GetAttrValue("AUTHORITY", 1)
                     status_crs = f" CRS INCORRECT (Actuel : EPSG:{current_epsg})"
 
-                print(f"📄 {filename:<25} | {status_crs}")
+                print(f" {filename:<25} | {status_crs}")
                 gdal_datasets[full_path] = data_set
             else:
                 print(f" Échec d'ouverture (Dataset Nul) : {filename}")

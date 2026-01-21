@@ -878,8 +878,8 @@ def analisar_classes(ndvi_valid):
     # Classification de la vigueur végétative
     classes = {
         "Sol/Eau (<0.1)": np.sum(ndvi_valid < 0.1),
-        "Vigueur Basse (0.1-0.3)": np.sum((ndvi_valid >= 0.1) & (ndvi_valid < 0.3)),
-        "Vigueur Moyenne (0.3-0.6)": np.sum((ndvi_valid >= 0.3) & (ndvi_valid < 0.6)),
+        "Vigueur Faible (0.1-0.3)": np.sum((ndvi_valid >= 0.1) & (ndvi_valid < 0.3)),
+        "Vigueur Modérée (0.3-0.6)": np.sum((ndvi_valid >= 0.3) & (ndvi_valid < 0.6)),
         "Vigueur Haute (>0.6)": np.sum(ndvi_valid >= 0.6)
     }
     return {k: (v / total) * 100 for k, v in classes.items()}

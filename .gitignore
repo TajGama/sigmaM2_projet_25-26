@@ -1,2 +1,5 @@
 results/
 *.tif
+__pycache__/
+results/
+*.tif

@@ -952,15 +952,15 @@ def gerar_df_ndvi(stats, classes, caminho_salvar=None):
 
 def calcular_estatisticas_area(map_data, results_dir):
     """
-    Calcule les surfaces en HA et les pourcentages à partir de la matrice de la carte classée.
+    Calcule les surfaces en HA et les pourcentages a partir de la matrice de la carte classee.
     """
     print("\n Calcul des statistiques d'occupation du sol...")
     
-    # Filtramos apenas pixels válidos (diferentes de NoData/NaN)
+    # Filtrage des pixels valides (NoData/NaN)
     valid_pixels = map_data[~np.isnan(map_data)]
     unique, counts = np.unique(valid_pixels, return_counts=True)
 
-    pixel_size = 10 * 10  # Résolution Sentinel-2: 100m²
+    pixel_size = 10 * 10  # Resolution Sentinel-2: 100m2
     total_area_pixels = np.sum(counts)
     class_names_list = ["Sol Nu", "Herbe", "Landes", "Arbre"]
 
@@ -980,16 +980,19 @@ def calcular_estatisticas_area(map_data, results_dir):
             "Pourcentage (%)": round(percentual, 2)
         })
 
-    # Geração da Tabela
+    # Generation de la table
     df_final = pd.DataFrame(data_final).sort_values(by="Surface (ha)", ascending=False)
 
-    # Exportação para CSV
+    # Exportation vers CSV
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+        
     csv_final_path = os.path.join(results_dir, "rapport_final_surfaces.csv")
     df_final.to_csv(csv_final_path, index=False, sep=';', encoding='utf-8-sig')
 
-    # Exibição formatada no console
+    # Affichage formaté sur la console
     print("\n" + "="*55)
-    print(f"{'RÉSUMÉ FINAL DE L''OCCUPATION DU SOL':^55}")
+    print(f"{'RESUME FINAL DE L''OCCUPATION DU SOL':^55}")
     print("="*55)
     print(f"{'CLASSE':<15} | {'SURFACE (HA)':>12} | {'POURCENTAGE':>12}")
     print("-" * 55)
@@ -997,25 +1000,23 @@ def calcular_estatisticas_area(map_data, results_dir):
         print(f"{row['Classe']:<15} | {row['Surface (ha)']:>12.2f} | {row['Pourcentage (%)']:>11.2f} %")
     print("-" * 55)
     
-    print(f" Données consolidées et sauvegardées sous : {csv_final_path}")
+    print(f" Donnees consolidees et sauvegardees sous : {csv_final_path}")
     return df_final
 
 def export_land_cover_chart(df, results_dir):
     """
-    Génère et exporte le graphique en anneau (donut chart) à partir du DataFrame des surfaces.
+    Genere et exporte le graphique en anneau (donut chart) a partir du DataFrame des surfaces.
     """
-    print("\n---  Génération du graphique de distribution ---")
+    print("\n --- Generation du graphique de distribution ---")
     
     labels = df['Classe']
     sizes = df['Pourcentage (%)']
     
-    # Mapeamento de cores fixas por classe
+    # Cartographie des couleurs fixes par classe
     color_map = {'Arbre': '#006400', 'Herbe': '#90EE90', 'Landes': '#FF4500', 'Sol Nu': '#808080'}
     colors = [color_map.get(label, '#000000') for label in labels]
 
     fig, ax = plt.subplots(figsize=(8, 8), facecolor='white')
-    
-    # Criando o gráfico de pizza
     explode = [0.05 if i == 0 else 0 for i in range(len(labels))]
 
     wedges, texts, autotexts = ax.pie(
@@ -1024,14 +1025,14 @@ def export_land_cover_chart(df, results_dir):
         explode=explode
     )
 
-    # Transformando em rosca (donut)
+    # Transformation en anneau (donut)
     centre_circle = plt.Circle((0,0), 0.70, fc='white')
     ax.add_artist(centre_circle)
 
     plt.setp(autotexts, size=10, weight="bold", color="white")
-    ax.set_title("Répartition de l'Occupation du Sol (%)", fontsize=15, pad=20)
+    ax.set_title("Repartition de l'Occupation du Sol (%)", fontsize=15, pad=20)
 
-    # Garantir que a pasta figure existe
+    # Verification du repertoire
     fig_dir = os.path.join(results_dir, "figure")
     if not os.path.exists(fig_dir):
         os.makedirs(fig_dir)
@@ -1040,5 +1041,5 @@ def export_land_cover_chart(df, results_dir):
     plt.savefig(chart_path, dpi=300, bbox_inches='tight')
     plt.show()
 
-    print(f" Graphique sauvegardé avec succès sous : {chart_path}")
+    print(f" Graphique sauvegarde avec succes sous : {chart_path}")
     return chart_path

@@ -42,7 +42,7 @@ Link: https://mlang.frama.io/cours-marc-lang/stable/sigmaM2_telea/sigmaM2_projet
 
 Ce dépôt contient le travail final développé pour le module de Télédétection Approfondie du Master 2 SIGMA (ENSAT/Agrogéomatique), pour l'année universitaire 2025-2026.
 
-## 📝 Résumé du Projet
+##  Résumé du Projet
 
 L'objectif principal est d'étudier la dynamique des strates végétales, et plus particulièrement de caractériser les **landes** (famille des *Éricacées*) sur le site des **Pyrénées (Série 23-24)**. Le projet s'appuie sur des séries temporelles d'images Sentinel-2 pour différencier les classes d'occupation du sol via des indices phénologiques et l'apprentissage automatique.
 
